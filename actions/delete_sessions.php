@@ -29,8 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $types = str_repeat('i', count($valid_ids));
             $stmt->bind_param($types, ...$valid_ids);
             
-            $stmt->execute();
+            if ($stmt->execute()) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Đã xóa ' . count($valid_ids) . ' buổi tập thành công!'
+                ];
+            } else {
+                $_SESSION['flash_message'] = [
+                    'type' => 'danger',
+                    'message' => 'Lỗi khi xóa buổi tập: ' . $stmt->error
+                ];
+            }
             $stmt->close();
+        } else {
+            $_SESSION['flash_message'] = [
+                'type' => 'warning',
+                'message' => 'Không có buổi tập nào được chọn để xóa!'
+            ];
         }
     }
 

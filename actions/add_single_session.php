@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
     die("Bạn không có quyền truy cập.");
 }
 
-include 'db.php';
+include '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contract_id = intval($_POST['contract_id']);
@@ -34,15 +34,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Nếu còn buổi, tiến hành thêm
         $stmt_insert = $conn->prepare("INSERT INTO training_sessions (contract_id, session_datetime, status) VALUES (?, ?, 'scheduled')");
         $stmt_insert->bind_param("is", $contract_id, $session_datetime_str);
-        $stmt_insert->execute();
+        
+        if ($stmt_insert->execute()) {
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Đã thêm buổi tập mới thành công!'
+            ];
+        } else {
+            $_SESSION['flash_message'] = [
+                'type' => 'danger',
+                'message' => 'Lỗi khi thêm buổi tập: ' . $stmt_insert->error
+            ];
+        }
         $stmt_insert->close();
     } else {
-        // Có thể thêm một thông báo lỗi ở đây
-        // Ví dụ: $_SESSION['error_message'] = "Hợp đồng đã hết số buổi tập.";
+        $_SESSION['flash_message'] = [
+            'type' => 'warning',
+            'message' => 'Hợp đồng đã hết số buổi tập!'
+        ];
     }
 
     // Quay trở lại trang chi tiết hợp đồng
-    header("Location: view_sessions.php?contract_id=" . $contract_id);
+    header("Location: ../view_sessions.php?contract_id=" . $contract_id);
     exit;
 }
 ?>

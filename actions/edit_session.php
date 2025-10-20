@@ -4,11 +4,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
     die("Bạn không có quyền truy cập.");
 }
 // Cập nhật đường dẫn đến db.php
-include 'includes/db.php';
+include '../includes/db.php';
 
 // Bắt buộc phải có session_id và contract_id trên URL
 if (!isset($_GET['session_id']) || !isset($_GET['contract_id'])) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -60,7 +60,7 @@ $session_time = $datetime->format('H:i');
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-                    <a href="view_sessions.php?contract_id=<?= $contract_id ?>" class="btn btn-secondary">Hủy</a>
+                    <a href="../view_sessions.php?contract_id=<?= $contract_id ?>" class="btn btn-secondary">Hủy</a>
                 </div>
             </form>
         </div>

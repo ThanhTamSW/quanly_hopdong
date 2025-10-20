@@ -77,7 +77,18 @@ $stmt_sessions->close();
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="index.php" class="btn btn-secondary">⬅️ Quay lại Danh sách</a>
-        <h4>Chi tiết Hợp đồng</h4>
+        <div class="d-flex gap-2">
+            <button class="btn btn-success" onclick="showQuickReport()">📊 Báo cáo ngày</button>
+            <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-outline-success">📋 Báo cáo chi tiết</a>
+            <a href="test_data.php" class="btn btn-info btn-sm">🔍 Test Data</a>
+            <a href="add_sample_data.php" class="btn btn-warning btn-sm">➕ Add Sample</a>
+            <a href="test_report_api.php" class="btn btn-danger btn-sm">🧪 Test API</a>
+            <a href="test_session_actions.php" class="btn btn-primary btn-sm">⚡ Test Actions</a>
+            <a href="debug_sessions.php" class="btn btn-dark btn-sm">🔍 Debug Sessions</a>
+            <a href="test_update_status.php" class="btn btn-success btn-sm">🔄 Test Update</a>
+            <a href="test_api_simple.php" class="btn btn-warning btn-sm">🔧 Test API Simple</a>
+            <h4 class="mb-0">Chi tiết Hợp đồng</h4>
+        </div>
     </div>
 
     <?php if ($flash_message): ?>
@@ -89,7 +100,7 @@ $stmt_sessions->close();
     
     <div class="row">
         <div class="col-lg-8">
-            <form action="delete_sessions.php" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa các buổi tập đã chọn?');">
+            <form action="actions/delete_sessions.php" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa các buổi tập đã chọn?');">
                 <input type="hidden" name="contract_id" value="<?= $contract_id ?>">
                 <div class="card shadow-sm">
                     <div class="card-header">
@@ -130,10 +141,10 @@ $stmt_sessions->close();
                                             </td>
                                             <td class="align-middle">
                                                 <?php if($isCoach && $session['status'] == 'scheduled'): ?>
-                                                    <a href="edit_session.php?session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-warning btn-sm" title="Sửa buổi tập">✏️</a>
-                                                    <a href="update_session_status.php?action=complete&session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-success btn-sm" title="Xác nhận hoàn thành">✅</a>
-                                                    <a href="update_session_status.php?action=cancel&session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-danger btn-sm" title="Hủy buổi tập">❌</a>
-                                                    <a href="delete_single_session.php?session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-dark btn-sm" title="Xóa buổi tập này" onclick="return confirm('Bạn có chắc chắn muốn xóa buổi tập này không?');">🗑️</a>
+                                                    <a href="actions/edit_session.php?session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-warning btn-sm" title="Sửa buổi tập">✏️</a>
+                                                    <a href="actions/update_session_status.php?action=complete&session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-success btn-sm" title="Xác nhận hoàn thành">✅</a>
+                                                    <a href="actions/update_session_status.php?action=cancel&session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-danger btn-sm" title="Hủy buổi tập">❌</a>
+                                                    <a href="actions/delete_single_session.php?session_id=<?= $session['id'] ?>&contract_id=<?= $contract_id ?>" class="btn btn-dark btn-sm" title="Xóa buổi tập này" onclick="return confirm('Bạn có chắc chắn muốn xóa buổi tập này không?');">🗑️</a>
                                                 <?php elseif (!empty($session['action_coach_name'])): ?>
                                                     <span class="text-muted fst-italic">bởi <?= htmlspecialchars($session['action_coach_name']) ?></span>
                                                 <?php endif; ?>
@@ -163,7 +174,7 @@ $stmt_sessions->close();
                 </div>
                 <div class="card-body">
                     <?php if($sessions_remaining > 0): ?>
-                        <form action="add_single_session.php" method="POST">
+                        <form action="actions/add_single_session.php" method="POST">
                             <input type="hidden" name="contract_id" value="<?= $contract_id ?>">
                             <div class="mb-3">
                                 <label for="session_date" class="form-label">Ngày tập</label>
@@ -189,14 +200,165 @@ $stmt_sessions->close();
     </div>
 </div>
 
+<!-- Modal báo cáo nhanh -->
+<div class="modal fade" id="quickReportModal" tabindex="-1" aria-labelledby="quickReportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickReportModalLabel">📊 Báo cáo lịch dạy hôm nay</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="reportLoading" class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Đang tải báo cáo...</p>
+                </div>
+                <div id="reportContent" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Nội dung báo cáo:</h6>
+                        <button class="btn btn-success btn-sm" onclick="copyReport()">📋 Copy</button>
+                    </div>
+                    <div class="report-text" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; white-space: pre-line; max-height: 400px; overflow-y: auto;"></div>
+                </div>
+                <div id="reportError" style="display: none;" class="alert alert-danger">
+                    <h6>❌ Lỗi tải báo cáo</h6>
+                    <p id="errorMessage"></p>
+                    <button class="btn btn-primary btn-sm" onclick="loadReport()">🔄 Thử lại</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-primary">📋 Xem báo cáo chi tiết</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let reportData = null;
+    
     document.getElementById('select_all_sessions').addEventListener('change', function(e) {
         const checkboxes = document.querySelectorAll('.session-checkbox');
         checkboxes.forEach(checkbox => {
             checkbox.checked = e.target.checked;
         });
     });
+    
+    function showQuickReport() {
+        const modal = new bootstrap.Modal(document.getElementById('quickReportModal'));
+        modal.show();
+        loadReport();
+    }
+    
+    function loadReport() {
+        const loading = document.getElementById('reportLoading');
+        const content = document.getElementById('reportContent');
+        const error = document.getElementById('reportError');
+        
+        // Hiển thị loading
+        loading.style.display = 'block';
+        content.style.display = 'none';
+        error.style.display = 'none';
+        
+        // Gọi API
+        fetch(`api/coach_report.php?date=<?= date('Y-m-d') ?>`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.text(); // Lấy text trước để kiểm tra
+            })
+            .then(text => {
+                console.log('Raw response:', text);
+                
+                // Kiểm tra xem có phải JSON không
+                try {
+                    const data = JSON.parse(text);
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    reportData = data;
+                    displayReport(data);
+                    
+                    // Ẩn loading, hiển thị báo cáo
+                    loading.style.display = 'none';
+                    content.style.display = 'block';
+                } catch (parseError) {
+                    throw new Error('Invalid JSON response: ' + parseError.message + '\nResponse: ' + text.substring(0, 200));
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                
+                // Ẩn loading, hiển thị lỗi
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                document.getElementById('errorMessage').textContent = err.message;
+            });
+    }
+    
+    function displayReport(data) {
+        const reportText = document.querySelector('.report-text');
+        let displayText = data.reportText;
+        
+        // Thêm thông tin debug nếu có
+        if (data.debug) {
+            displayText += "\n\n--- DEBUG INFO ---\n";
+            displayText += "Buổi tập hôm nay: " + data.debug.today_sessions_count + "\n";
+            displayText += "Buổi tập ngày mai: " + data.debug.next_sessions_count + "\n";
+            displayText += "Buổi đã hoàn thành: " + data.debug.completed_sessions_count + "\n";
+            displayText += "Coach ID: " + data.debug.coach_id + "\n";
+            displayText += "Ngày hiện tại: " + data.debug.current_date_str + "\n";
+            
+            if (data.debug.today_sessions && data.debug.today_sessions.length > 0) {
+                displayText += "\nChi tiết buổi tập hôm nay:\n";
+                data.debug.today_sessions.forEach((session, index) => {
+                    displayText += `${index + 1}. ${session.time} ${session.client} (${session.status})\n`;
+                });
+            }
+        }
+        
+        reportText.textContent = displayText;
+    }
+    
+    function copyReport() {
+        if (!reportData) {
+            alert('Không có dữ liệu báo cáo để copy!');
+            return;
+        }
+        
+        const reportText = reportData.reportText;
+        
+        navigator.clipboard.writeText(reportText).then(function() {
+            // Hiển thị toast thông báo
+            const toast = document.createElement('div');
+            toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ✅ Đã sao chép nội dung báo cáo!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            // Tự động xóa toast sau 3 giây
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }, function(err) {
+            alert('Lỗi khi copy: ' + err);
+        });
+    }
 </script>
 </body>
 </html>

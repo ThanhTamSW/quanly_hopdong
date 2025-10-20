@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
 }
 
 // Cập nhật đường dẫn đến db.php
-include 'includes/db.php';
+include '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $session_id = intval($_POST['session_id']);
@@ -25,11 +25,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("si", $new_datetime, $session_id);
     
     if ($stmt->execute()) {
+        // Thêm thông báo thành công
+        $_SESSION['flash_message'] = [
+            'type' => 'success',
+            'message' => 'Đã cập nhật lịch tập thành công!'
+        ];
+        
         // Nếu thành công, quay về trang chi tiết hợp đồng
-        header("Location: view_sessions.php?contract_id=" . $contract_id);
+        header("Location: ../view_sessions.php?contract_id=" . $contract_id);
         exit;
     } else {
-        echo "Lỗi khi cập nhật buổi tập: " . $stmt->error;
+        $_SESSION['flash_message'] = [
+            'type' => 'danger',
+            'message' => 'Lỗi khi cập nhật buổi tập: ' . $stmt->error
+        ];
+        header("Location: ../view_sessions.php?contract_id=" . $contract_id);
+        exit;
     }
     $stmt->close();
 }
