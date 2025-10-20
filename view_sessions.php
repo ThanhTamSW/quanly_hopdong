@@ -75,19 +75,16 @@ $stmt_sessions->close();
 </head>
 <body class="bg-light">
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="index.php" class="btn btn-secondary">⬅️ Quay lại Danh sách</a>
-        <div class="d-flex gap-2">
-            <button class="btn btn-success" onclick="showQuickReport()">📊 Báo cáo ngày</button>
-            <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-outline-success">📋 Báo cáo chi tiết</a>
-            <a href="test_data.php" class="btn btn-info btn-sm">🔍 Test Data</a>
-            <a href="add_sample_data.php" class="btn btn-warning btn-sm">➕ Add Sample</a>
-            <a href="test_report_api.php" class="btn btn-danger btn-sm">🧪 Test API</a>
-            <a href="test_session_actions.php" class="btn btn-primary btn-sm">⚡ Test Actions</a>
-            <a href="debug_sessions.php" class="btn btn-dark btn-sm">🔍 Debug Sessions</a>
-            <a href="test_update_status.php" class="btn btn-success btn-sm">🔄 Test Update</a>
-            <a href="test_api_simple.php" class="btn btn-warning btn-sm">🔧 Test API Simple</a>
-            <h4 class="mb-0">Chi tiết Hợp đồng</h4>
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+                <a href="index.php" class="btn btn-secondary mb-2 mb-md-0">⬅️ Quay lại Danh sách</a>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <button class="btn btn-success" onclick="showQuickReport()">📊 Báo cáo ngày</button>
+                    <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-outline-success">📋 Báo cáo chi tiết</a>
+                </div>
+            </div>
+            <h4 class="mb-0 mt-2">Chi tiết Hợp đồng</h4>
         </div>
     </div>
 
@@ -99,7 +96,7 @@ $stmt_sessions->close();
     <?php endif; ?>
     
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-12 col-lg-8">
             <form action="actions/delete_sessions.php" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa các buổi tập đã chọn?');">
                 <input type="hidden" name="contract_id" value="<?= $contract_id ?>">
                 <div class="card shadow-sm">
@@ -167,7 +164,7 @@ $stmt_sessions->close();
             </form>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-12 col-lg-4 mt-4 mt-lg-0">
             <div class="card shadow-sm">
                 <div class="card-header">
                     <h5>Thêm buổi tập lẻ</h5>

@@ -48,7 +48,10 @@ $sql_today = "
         client.full_name AS client_name,
         c.package_name,
         c.total_sessions,
-        (SELECT COUNT(id) FROM training_sessions WHERE contract_id = c.id AND status = 'completed') as sessions_completed
+        GREATEST(
+            (SELECT COUNT(*) FROM training_sessions ts2 WHERE ts2.contract_id = c.id AND ts2.status = 'completed'),
+            (SELECT COUNT(*) FROM payroll_log pl WHERE pl.contract_id = c.id)
+        ) AS sessions_completed
     FROM training_sessions ts
     JOIN contracts c ON ts.contract_id = c.id
     JOIN users client ON c.client_id = client.id
@@ -90,7 +93,10 @@ $sql_next = "
         client.full_name AS client_name,
         c.package_name,
         c.total_sessions,
-        (SELECT COUNT(id) FROM training_sessions WHERE contract_id = c.id AND status = 'completed') as sessions_completed
+        GREATEST(
+            (SELECT COUNT(*) FROM training_sessions ts2 WHERE ts2.contract_id = c.id AND ts2.status = 'completed'),
+            (SELECT COUNT(*) FROM payroll_log pl WHERE pl.contract_id = c.id)
+        ) AS sessions_completed
     FROM training_sessions ts
     JOIN contracts c ON ts.contract_id = c.id
     JOIN users client ON c.client_id = client.id
@@ -155,12 +161,13 @@ if (!empty($today_sessions)) {
     $report_text .= "Không có buổi tập nào\n";
 }
 
+
 // Timeline ngày kế tiếp
 $report_text .= "\ntimeline " . $next_date->format('d/m') . "\n";
 if (!empty($next_sessions)) {
     foreach ($next_sessions as $session) {
         $remaining = $session['total_sessions'] - $session['sessions_completed'];
-        $report_text .= $session['time'] . " " . $session['client'] . " - " . $remaining . "\n";
+        $report_text .= $session['time'] . " " . $session['client'] . " - " . $remaining . " buổi còn lại\n";
     }
 } else {
     $report_text .= "Không có buổi tập nào\n";

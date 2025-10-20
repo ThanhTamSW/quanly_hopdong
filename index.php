@@ -119,14 +119,14 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
 <div class="card shadow-sm mb-3">
     <div class="card-body">
         <div class="row g-2 align-items-center">
-            <div class="col-md-auto">
-                  <a class="btn btn-success" href="add_contract.php">+ Thêm hợp đồng</a>
+            <div class="col-12 col-md-auto mb-2 mb-md-0">
+                  <a class="btn btn-success w-100 w-md-auto" href="add_contract.php">+ Thêm hợp đồng</a>
             </div>
-            <div class="col-md">
-                <form method="GET" action="index.php" class="d-flex">
+            <div class="col-12 col-md">
+                <form method="GET" action="index.php" class="d-flex flex-column flex-md-row gap-2">
                     <input type="hidden" name="coach_id" value="<?= htmlspecialchars($active_coach_id) ?>">
                     <input type="text" name="search" class="form-control" placeholder="Tìm trong tab hiện tại..." value="<?= htmlspecialchars($search_term) ?>">
-                    <button type="submit" class="btn btn-info ms-2">Tìm</button>
+                    <button type="submit" class="btn btn-info">Tìm</button>
                 </form>
             </div>
         </div>
@@ -134,7 +134,7 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
         <hr>
 
         <div class="row text-center">
-            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+            <div class="col-12 col-lg-4 col-md-6 mb-3 mb-lg-0">
                 <?php
                     $revenue_title = 'Doanh thu Tổng';
                     if ($active_coach_id !== 'all') {
@@ -149,16 +149,16 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
                 <h6 class="mb-0"><?= $revenue_title ?></h6>
                 <p class="fs-5 text-success fw-bold mb-0"><?= number_format($overall_revenue, 0, ',', '.') ?>đ</p>
             </div>
-            <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
+            <div class="col-12 col-lg-4 col-md-6 mb-3 mb-lg-0">
                 <h6 class="mb-0">Doanh thu Tháng <?= date('m/Y') ?></h6>
                 <p class="fs-5 text-primary fw-bold mb-0"><?= number_format($monthly_revenue, 0, ',', '.') ?>đ</p>
             </div>
-            <div class="col-lg-4 col-md-12">
+            <div class="col-12 col-lg-4 col-md-12">
                 <?php if ($active_coach_id !== 'all'): ?>
-                    <form action="actions/export_advanced.php" method="GET" class="d-inline-flex align-items-center justify-content-center justify-content-lg-end w-100">
+                    <form action="actions/export_advanced.php" method="GET" class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-end w-100 gap-2">
                         <input type="hidden" name="coach_id" value="<?= $active_coach_id ?>">
-                        <label for="month-select-<?= $active_coach_id ?>" class="me-2 text-nowrap">Xuất lương tháng:</label>
-                        <input type="month" id="month-select-<?= $active_coach_id ?>" name="month" class="form-control form-control-sm me-2" style="width: auto;" value="<?= date('Y-m') ?>">
+                        <label for="month-select-<?= $active_coach_id ?>" class="text-nowrap">Xuất lương tháng:</label>
+                        <input type="month" id="month-select-<?= $active_coach_id ?>" name="month" class="form-control form-control-sm" style="width: auto;" value="<?= date('Y-m') ?>">
                         <button type="submit" class="btn btn-sm btn-outline-success text-nowrap">
                             Xuất Excel
                         </button>
@@ -211,11 +211,11 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
           <td><?= ($row['discount_percentage'] > 0) ? $row['discount_percentage'] . '%' : '-' ?></td>
           <td><?= number_format($price_per_session, 0, ',', '.') ?>đ</td>
           <td>
-            <div class="d-flex flex-wrap justify-content-center">
-                <a class="btn btn-info btn-sm m-1" href="view_sessions.php?contract_id=<?= $row['id'] ?>" title="Quản lý lịch tập chi tiết">Quản lý lịch</a>
-                <button class="btn btn-success btn-sm m-1" onclick="copyScheduleLink(<?= $row['id'] ?>)" title="Sao chép link lịch tập để gửi cho học viên">Lấy Link HV</button>
-                <a class="btn btn-warning btn-sm m-1" href="edit_contract.php?id=<?= $row['id'] ?>" title="Sửa thông tin hợp đồng">Sửa</a>
-                <a class="btn btn-danger btn-sm m-1" href="actions/delete_contract.php?id=<?= $row['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa hợp đồng này không?')" title="Xóa hợp đồng">Xóa</a>
+            <div class="d-flex flex-column flex-sm-row flex-wrap justify-content-center gap-1">
+                <a class="btn btn-info btn-sm" href="view_sessions.php?contract_id=<?= $row['id'] ?>" title="Quản lý lịch tập chi tiết">Quản lý lịch</a>
+                <button class="btn btn-success btn-sm" onclick="copyScheduleLink(<?= $row['id'] ?>)" title="Sao chép link lịch tập để gửi cho học viên">Lấy Link HV</button>
+                <a class="btn btn-warning btn-sm" href="edit_contract.php?id=<?= $row['id'] ?>" title="Sửa thông tin hợp đồng">Sửa</a>
+                <a class="btn btn-danger btn-sm" href="actions/delete_contract.php?id=<?= $row['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa hợp đồng này không?')" title="Xóa hợp đồng">Xóa</a>
             </div>
           </td>
         </tr>
