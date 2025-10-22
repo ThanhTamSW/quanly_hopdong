@@ -115,8 +115,8 @@ $days_of_week = [1 => 'Thứ Hai', 2 => 'Thứ Ba', 3 => 'Thứ Tư', 4 => 'Th�
                                                 if ($session_hour == $slot_hour) {
                                                     foreach ($sessions as $session) {
                                                         echo '<div class="alert alert-info p-2 mb-1" style="font-size: 0.9em;">';
-                                                        echo '<strong>' . htmlspecialchars($time) . ' - ' . htmlspecialchars($session['coach']) . '</strong><br>';
-                                                        echo '<em>HV: ' . htmlspecialchars($session['client']) . '</em>';
+                                                        echo '<strong>' . htmlspecialchars($session['client']) . '</strong><br>';
+                                                        echo '<small>' . htmlspecialchars($time) . ' - ' . htmlspecialchars($session['coach']) . '</small>';
                                                         echo '</div>';
                                                     }
                                                 }

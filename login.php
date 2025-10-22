@@ -1,16 +1,18 @@
 <?php
-$page_title = 'Đăng nhập';
-$requires_login = false;
-include 'includes/header.php';
+session_start();
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
+// Kiểm tra nếu đã đăng nhập thì chuyển về trang chủ
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
+
 include 'includes/db.php';
 
 $error = "";
 
-if (isset($_SESSION['user_id'])) {
-    header("Location: index.php"); // Nếu đã đăng nhập thì chuyển về trang chủ
-    exit;
-}
-
+// Xử lý form đăng nhập
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number = trim($_POST['phone_number']);
     $password = trim($_POST['password']);
@@ -38,6 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmt->close();
 }
+
+// Bây giờ mới include header (sau khi đã xử lý redirect)
+$page_title = 'Đăng nhập';
+$requires_login = false;
+include 'includes/header.php';
 ?>
 
 <div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">

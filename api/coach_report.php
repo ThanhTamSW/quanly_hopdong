@@ -144,16 +144,9 @@ if (!empty($today_sessions)) {
     
     foreach ($today_sessions as $session) {
         $status_text = "";
-        switch ($session['status']) {
-            case 'completed':
-                $status_text = " (done)";
-                break;
-            case 'scheduled':
-                $status_text = " (scheduled)";
-                break;
-            case 'cancelled':
-                $status_text = " (cancelled)";
-                break;
+        // Chỉ hiển thị cancelled, không hiển thị done hay scheduled
+        if ($session['status'] === 'cancelled') {
+            $status_text = " (cancelled)";
         }
         $report_text .= $session['time'] . " " . $session['client'] . $status_text . "\n";
     }
@@ -163,11 +156,11 @@ if (!empty($today_sessions)) {
 
 
 // Timeline ngày kế tiếp
-$report_text .= "\ntimeline " . $next_date->format('d/m') . "\n";
+$report_text .= "\nTimeline " . $next_date->format('d/m') . "\n";
 if (!empty($next_sessions)) {
     foreach ($next_sessions as $session) {
         $remaining = $session['total_sessions'] - $session['sessions_completed'];
-        $report_text .= $session['time'] . " " . $session['client'] . " - " . $remaining . " buổi còn lại\n";
+        $report_text .= $session['time'] . " " . $session['client'] . " - " . $remaining . "\n";
     }
 } else {
     $report_text .= "Không có buổi tập nào\n";

@@ -53,6 +53,22 @@ $stmt_monthly->execute();
 $monthly_revenue = $stmt_monthly->get_result()->fetch_assoc()['total'] ?? 0;
 $stmt_monthly->close();
 
+// Lấy thông tin Target của coach (nếu là tab coach cụ thể)
+$sales_target = 0;
+$target_percentage = 0;
+if ($active_coach_id !== 'all') {
+    $stmt_target = $conn->prepare("SELECT sales_target FROM users WHERE id = ? AND role = 'coach'");
+    $stmt_target->bind_param("i", $active_coach_id);
+    $stmt_target->execute();
+    $target_result = $stmt_target->get_result()->fetch_assoc();
+    $sales_target = $target_result['sales_target'] ?? 0;
+    $stmt_target->close();
+    
+    if ($sales_target > 0) {
+        $target_percentage = ($monthly_revenue / $sales_target) * 100;
+    }
+}
+
 
 // --- XÂY DỰNG CÂU LỆNH SQL ĐỂ HIỂN THỊ DANH SÁCH ---
 $sql_where_clause = '';
@@ -152,6 +168,21 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
             <div class="col-12 col-lg-4 col-md-6 mb-3 mb-lg-0">
                 <h6 class="mb-0">Doanh thu Tháng <?= date('m/Y') ?></h6>
                 <p class="fs-5 text-primary fw-bold mb-0"><?= number_format($monthly_revenue, 0, ',', '.') ?>đ</p>
+                <?php if ($active_coach_id !== 'all' && $sales_target > 0): ?>
+                    <div class="mt-2">
+                        <small class="text-muted">Target: <?= number_format($sales_target, 0, ',', '.') ?>đ</small>
+                        <div class="progress mt-1" style="height: 20px;">
+                            <?php
+                                $progress_color = 'bg-danger';
+                                if ($target_percentage >= 100) $progress_color = 'bg-success';
+                                elseif ($target_percentage >= 80) $progress_color = 'bg-warning';
+                            ?>
+                            <div class="progress-bar <?= $progress_color ?>" role="progressbar" style="width: <?= min($target_percentage, 100) ?>%;" aria-valuenow="<?= $target_percentage ?>" aria-valuemin="0" aria-valuemax="100">
+                                <?= number_format($target_percentage, 1) ?>%
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="col-12 col-lg-4 col-md-12">
                 <?php if ($active_coach_id !== 'all'): ?>
@@ -198,8 +229,8 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
             else if ($sessions_remaining <= 2) $class = "warning";
         ?>
         <tr class="<?= $class ?>">
-          <td><?= date("d/m/Y", strtotime($row['start_date'])) ?></td>
-          <td><?= date("d/m/Y", strtotime($row['end_date_estimated'])) ?></td>
+          <td><?= $row['start_date'] && $row['start_date'] != '0000-00-00' ? date("d/m/Y", strtotime($row['start_date'])) : '-' ?></td>
+          <td><?= $row['end_date_estimated'] && $row['end_date_estimated'] != '0000-00-00' ? date("d/m/Y", strtotime($row['end_date_estimated'])) : '-' ?></td>
           <td><?= htmlspecialchars($row['coach_name']) ?></td>
           <td><?= htmlspecialchars($row['client_name']) ?></td>
           <td><?= htmlspecialchars($row['client_phone']) ?></td>

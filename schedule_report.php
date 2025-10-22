@@ -45,7 +45,7 @@ $date_param = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
             background: #f8f9fa;
             border-radius: 12px;
             padding: 20px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             white-space: pre-line;
             font-size: 14px;
             line-height: 1.6;
