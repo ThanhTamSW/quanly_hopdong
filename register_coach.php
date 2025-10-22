@@ -19,13 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (strlen($password) < 6) {
         $error = "Mật khẩu phải có ít nhất 6 ký tự.";
     } else {
-        $stmt = $conn->prepare("SELECT id FROM users WHERE phone_number = ?");
+        // Kiểm tra xem SĐT đã được dùng cho Coach chưa
+        $stmt = $conn->prepare("SELECT id FROM users WHERE phone_number = ? AND role = 'coach'");
         $stmt->bind_param("s", $phone_number);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $error = "Số điện thoại này đã được đăng ký.";
+            $error = "Số điện thoại này đã được đăng ký làm Coach.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $role = 'coach';

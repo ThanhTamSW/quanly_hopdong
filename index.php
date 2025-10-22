@@ -214,6 +214,7 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
         <th>Đã tập</th>
         <th>Còn lại</th>
         <th>Thành tiền</th>
+        <th>Thanh toán</th>
         <th>Giảm giá</th>
         <th>Giá/buổi</th>
         <th>Hành động</th>
@@ -239,6 +240,19 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
           <td><?= $row['sessions_completed'] ?></td>
           <td><strong class="text-danger"><?= $sessions_remaining ?></strong></td>
           <td><?= number_format($row['final_price'], 0, ',', '.') ?>đ</td>
+          <td>
+            <?php if (isset($row['payment_type']) && $row['payment_type'] === 'installment'): 
+                $payment_progress = ($row['final_price'] > 0) ? ($row['paid_amount'] / $row['final_price']) * 100 : 0;
+            ?>
+                <span class="badge bg-info">Trả góp</span><br>
+                <small><?= number_format($row['paid_amount'], 0, ',', '.') ?>đ / <?= number_format($row['final_price'], 0, ',', '.') ?>đ</small>
+                <div class="progress mt-1" style="height: 8px;">
+                    <div class="progress-bar bg-success" style="width: <?= min($payment_progress, 100) ?>%;"></div>
+                </div>
+            <?php else: ?>
+                <span class="badge bg-success">Full</span>
+            <?php endif; ?>
+          </td>
           <td><?= ($row['discount_percentage'] > 0) ? $row['discount_percentage'] . '%' : '-' ?></td>
           <td><?= number_format($price_per_session, 0, ',', '.') ?>đ</td>
           <td>
