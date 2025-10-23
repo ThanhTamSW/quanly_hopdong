@@ -14,9 +14,7 @@ $nav_items = [
     'coach_schedule.php' => 'Lịch dạy',
     'add_contract.php' => 'Thêm Hợp đồng',
     'payment_installments.php' => '💰 Quản lý Trả góp',
-    'manage_targets.php' => '🎯 Quản lý Target',
-    'blog_admin.php' => '🤖 Blog AI',
-    'blog.php' => '📚 Xem Blog'
+    'manage_targets.php' => '🎯 Quản lý Target'
 ];
 
 // Nếu file này được gọi từ một trang yêu cầu đăng nhập, hãy kiểm tra session
