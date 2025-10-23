@@ -50,29 +50,15 @@ $packages = [
                 <label for="start_date" class="form-label">Ngày bắt đầu hợp đồng</label>
                 <input type="date" name="start_date" id="start_date" class="form-control" required value="<?= date('Y-m-d') ?>">
             </div>
-            <div class="col-md-6">
-                <label for="package_name" class="form-label">Gói sản phẩm</label>
-                <select name="package_name" id="package_name" class="form-select" required>
-                    <option value="" data-sessions="" data-price="">-- Chọn gói tập --</option>
-                    <?php foreach ($packages as $name => $details): ?>
-                        <option value="<?= htmlspecialchars($name) ?>" data-sessions="<?= $details['sessions'] ?>" data-price="<?= $details['price'] ?>"><?= htmlspecialchars($name) ?></option>
-                    <?php endforeach; ?>
-                    <option value="other">-- Khác (Nhập thủ công) --</option>
-                </select>
-            </div>
-
-            <div class="col-md-6" id="custom_package_wrapper" style="display: none;">
-                <label for="custom_package_name" class="form-label">Tên gói tùy chỉnh</label>
-                <input type="text" name="custom_package_name" id="custom_package_name" class="form-control">
-            </div>
+            <!-- ĐÃ XÓA: Gói sản phẩm dropdown - Người dùng tự nhập số buổi và giá -->
 
             <div class="col-md-6">
                 <label for="total_sessions" class="form-label">Tổng số buổi</label>
-                <input type="number" name="total_sessions" id="total_sessions" class="form-control" min="1" required readonly>
+                <input type="number" name="total_sessions" id="total_sessions" class="form-control" min="1" required>
             </div>
             <div class="col-md-6">
                 <label for="total_price" class="form-label">Giá gốc (VNĐ)</label>
-                <input type="number" name="total_price" id="total_price" class="form-control" min="0" required readonly>
+                <input type="number" name="total_price" id="total_price" class="form-control" min="0" required>
             </div>
             <div class="col-md-6">
                 <label for="discount_percentage" class="form-label">Giảm giá</label>

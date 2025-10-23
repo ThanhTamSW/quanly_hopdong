@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Lấy thông tin hợp đồng
     $coach_id = intval($_POST['coach_id']);
     $start_date_str = $_POST['start_date'];
-    $package_choice = $_POST['package_name'];
+    // ĐÃ XÓA: package_name - Không cần lưu tên gói nữa
     $total_sessions = intval($_POST['total_sessions']);
     
     // CẬP NHẬT: Lấy đầy đủ thông tin giá và giảm giá
@@ -60,13 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("ID của học viên không hợp lệ.");
         }
 
-        // === BƯỚC 2: TẠO HỢP ĐỒNG ===
-        $package_to_save = ($package_choice === 'other' && !empty($_POST['custom_package_name'])) 
-            ? trim($_POST['custom_package_name']) 
-            : $package_choice;
+        // === BƯỚC 2: TẠO HỢP ĐỒNG (KHÔNG LƯU PACKAGE_NAME) ===
+        $package_name_null = NULL; // Để NULL - không cần lưu tên gói
         
         $stmt_contract = $conn->prepare("INSERT INTO contracts (client_id, coach_id, start_date, package_name, total_sessions, total_price, discount_percentage, final_price, payment_type, paid_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
-        $stmt_contract->bind_param("iissiiiisi", $client_id_for_contract, $coach_id, $start_date_str, $package_to_save, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
+        $stmt_contract->bind_param("iissiiiisi", $client_id_for_contract, $coach_id, $start_date_str, $package_name_null, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
         $stmt_contract->execute();
         $new_contract_id = $stmt_contract->insert_id;
         $stmt_contract->close();

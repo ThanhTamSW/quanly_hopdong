@@ -1,0 +1,29 @@
+# Bảo mật API Keys
+config.ai.php
+.env
+
+# Uploads
+uploads/
+uploads/blog_images/
+
+# Database config (nếu có thông tin nhạy cảm)
+config.php
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vendor (nếu dùng Composer)
+vendor/
+composer.lock
+

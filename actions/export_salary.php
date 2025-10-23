@@ -150,13 +150,13 @@ $sheet->setCellValue('K' . $row, number_format($com_day_total, 0, ',', '.'));
 $row++;
 $sheet->setCellValue('B' . $row, 'STT');
 $sheet->setCellValue('C' . $row, 'TÊN HỌC VIÊN');
-$sheet->setCellValue('D' . $row, 'LOẠI SẢN PHẨM');
-$sheet->setCellValue('E' . $row, 'SỐ BUỔI');
-$sheet->setCellValue('F' . $row, 'SỐ TIỀN');
-$sheet->setCellValue('G' . $row, 'SỐ BUỔI ĐÃ DẠY');
-$sheet->setCellValue('H' . $row, 'SỐ TIỀN MỖI BUỔI');
-$sheet->setCellValue('I' . $row, '% COM DẠY');
-$sheet->setCellValue('J' . $row, 'SỐ TIỀN DẠY');
+// ĐÃ XÓA CỘT D: LOẠI SẢN PHẨM
+$sheet->setCellValue('D' . $row, 'SỐ BUỔI');
+$sheet->setCellValue('E' . $row, 'SỐ TIỀN');
+$sheet->setCellValue('F' . $row, 'SỐ BUỔI ĐÃ DẠY');
+$sheet->setCellValue('G' . $row, 'SỐ TIỀN MỖI BUỔI');
+$sheet->setCellValue('H' . $row, '% COM DẠY');
+$sheet->setCellValue('I' . $row, 'SỐ TIỀN DẠY');
 
 // Fill header background
 $headerStyle = [
@@ -167,20 +167,20 @@ $headerStyle = [
     'font' => ['bold' => true],
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
 ];
-$sheet->getStyle('B' . $row . ':J' . $row)->applyFromArray($headerStyle);
+$sheet->getStyle('B' . $row . ':I' . $row)->applyFromArray($headerStyle);
 
 $row++;
 $stt = 1;
 foreach ($sessions as $session) {
     $sheet->setCellValue('B' . $row, $stt++);
     $sheet->setCellValue('C' . $row, $session['client_name']);
-    $sheet->setCellValue('D' . $row, $session['package_name']);
-    $sheet->setCellValue('E' . $row, $session['total_sessions']);
-    $sheet->setCellValue('F' . $row, number_format($session['final_price'], 0, ',', '.'));
-    $sheet->setCellValue('G' . $row, $session['buoi_da_day']);
-    $sheet->setCellValue('H' . $row, number_format($session['gia_per_buoi'], 0, ',', '.'));
-    $sheet->setCellValue('I' . $row, $com_day_rate . '%');
-    $sheet->setCellValue('J' . $row, number_format($session['buoi_da_day'] * $session['gia_per_buoi'] * 0.26, 0, ',', '.'));
+    // ĐÃ XÓA CỘT D: package_name
+    $sheet->setCellValue('D' . $row, $session['total_sessions']);
+    $sheet->setCellValue('E' . $row, number_format($session['final_price'], 0, ',', '.'));
+    $sheet->setCellValue('F' . $row, $session['buoi_da_day']);
+    $sheet->setCellValue('G' . $row, number_format($session['gia_per_buoi'], 0, ',', '.'));
+    $sheet->setCellValue('H' . $row, $com_day_rate . '%');
+    $sheet->setCellValue('I' . $row, number_format($session['buoi_da_day'] * $session['gia_per_buoi'] * 0.26, 0, ',', '.'));
     $row++;
 }
 

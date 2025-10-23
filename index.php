@@ -139,10 +139,10 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
                   <a class="btn btn-success w-100 w-md-auto" href="add_contract.php">+ Thêm hợp đồng</a>
             </div>
             <div class="col-12 col-md">
-                <form method="GET" action="index.php" class="d-flex flex-column flex-md-row gap-2">
+                <form method="GET" action="index.php" class="d-flex gap-2">
                     <input type="hidden" name="coach_id" value="<?= htmlspecialchars($active_coach_id) ?>">
-                    <input type="text" name="search" class="form-control" placeholder="Tìm trong tab hiện tại..." value="<?= htmlspecialchars($search_term) ?>">
-                    <button type="submit" class="btn btn-info">Tìm</button>
+                    <input type="text" name="search" class="form-control flex-grow-1" placeholder="Tìm trong tab hiện tại..." value="<?= htmlspecialchars($search_term) ?>">
+                    <button type="submit" class="btn btn-info" style="white-space: nowrap; min-width: 70px;">Tìm</button>
                 </form>
             </div>
         </div>
@@ -200,24 +200,27 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
     </div>
 </div>
 
-<div class="table-responsive shadow-sm">
-  <table class="table table-bordered table-hover bg-white mb-0">
+<!-- Mobile scroll hint -->
+<div class="alert alert-info d-md-none mb-2 py-2">
+    <small>👉 Vuốt sang trái/phải để xem toàn bộ bảng</small>
+</div>
+
+<div class="table-responsive shadow-sm" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+  <table class="table table-bordered table-hover bg-white mb-0" style="min-width: 1100px;">
     <thead class="table-dark">
       <tr>
-        <th>Ngày bắt đầu</th>
-        <th>Ngày kết thúc</th>
-        <th>Tên HLV</th>
-        <th>Học viên</th>
-        <th>SĐT Học viên</th>
-        <th>Gói SP</th>
-        <th>Tổng buổi</th>
-        <th>Đã tập</th>
-        <th>Còn lại</th>
-        <th>Thành tiền</th>
-        <th>Thanh toán</th>
-        <th>Giảm giá</th>
-        <th>Giá/buổi</th>
-        <th>Hành động</th>
+        <th style="min-width: 100px;">Ngày bắt đầu</th>
+        <th style="min-width: 100px;">Ngày kết thúc</th>
+        <th style="min-width: 120px;">Tên HLV</th>
+        <th style="min-width: 150px;">Học viên</th>
+        <th style="min-width: 110px;">SĐT Học viên</th>
+        <th style="min-width: 80px;">Tổng buổi</th>
+        <th style="min-width: 70px;">Đã tập</th>
+        <th style="min-width: 70px;">Còn lại</th>
+        <th style="min-width: 110px;">Thành tiền</th>
+        <th style="min-width: 120px;">Thanh toán</th>
+        <th style="min-width: 80px;">Giảm giá</th>
+        <th style="min-width: 90px;">Giá/buổi</th>
       </tr>
     </thead>
     <tbody>
@@ -235,7 +238,6 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
           <td><?= htmlspecialchars($row['coach_name']) ?></td>
           <td><?= htmlspecialchars($row['client_name']) ?></td>
           <td><?= htmlspecialchars($row['client_phone']) ?></td>
-          <td><?= htmlspecialchars($row['package_name']) ?></td>
           <td><?= $row['total_sessions'] ?></td>
           <td><?= $row['sessions_completed'] ?></td>
           <td><strong class="text-danger"><?= $sessions_remaining ?></strong></td>
@@ -255,22 +257,59 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
           </td>
           <td><?= ($row['discount_percentage'] > 0) ? $row['discount_percentage'] . '%' : '-' ?></td>
           <td><?= number_format($price_per_session, 0, ',', '.') ?>đ</td>
-          <td>
-            <div class="d-flex flex-column flex-sm-row flex-wrap justify-content-center gap-1">
-                <a class="btn btn-info btn-sm" href="view_sessions.php?contract_id=<?= $row['id'] ?>" title="Quản lý lịch tập chi tiết">Quản lý lịch</a>
-                <button class="btn btn-success btn-sm" onclick="copyScheduleLink(<?= $row['id'] ?>)" title="Sao chép link lịch tập để gửi cho học viên">Lấy Link HV</button>
-                <a class="btn btn-warning btn-sm" href="edit_contract.php?id=<?= $row['id'] ?>" title="Sửa thông tin hợp đồng">Sửa</a>
-                <a class="btn btn-danger btn-sm" href="actions/delete_contract.php?id=<?= $row['id'] ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa hợp đồng này không?')" title="Xóa hợp đồng">Xóa</a>
-            </div>
-          </td>
         </tr>
         <?php endforeach; ?>
     <?php else: ?>
-        <tr><td colspan="13" class="text-center">Không tìm thấy hợp đồng nào.</td></tr>
+        <tr><td colspan="12" class="text-center">Không tìm thấy hợp đồng nào.</td></tr>
     <?php endif; ?>
     </tbody>
   </table>
 </div>
+
+<style>
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+    .table-responsive {
+        position: relative;
+        border-radius: 8px;
+    }
+    
+    /* Add shadow để user biết có thể scroll */
+    .table-responsive::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 30px;
+        background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+        pointer-events: none;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .btn-sm {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    /* Sticky first column on mobile */
+    .table thead th:first-child,
+    .table tbody td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: white;
+        z-index: 10;
+    }
+    
+    .table thead th:first-child {
+        background-color: #212529;
+        z-index: 11;
+    }
+}
+</style>
 
 <script>
 function copyScheduleLink(contractId) {

@@ -11,14 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $contract_id = intval($_POST['contract_id']);
         $coach_id = intval($_POST['coach_id']);
         $start_date_str = $_POST['start_date'];
-        $package_name = trim($_POST['package_name']);
+        // ĐÃ XÓA: package_name - Không cần cập nhật tên gói
         $total_sessions = intval($_POST['total_sessions']);
         $total_price = intval($_POST['total_price']);
         $discount_percentage = intval($_POST['discount_percentage']);
         $final_price = intval($_POST['final_price']);
 
-        $stmt_update = $conn->prepare("UPDATE contracts SET coach_id = ?, start_date = ?, package_name = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
-        $stmt_update->bind_param("issiiiii", $coach_id, $start_date_str, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
+        $stmt_update = $conn->prepare("UPDATE contracts SET coach_id = ?, start_date = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
+        $stmt_update->bind_param("isiiiiii", $coach_id, $start_date_str, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
         $stmt_update->execute();
         $stmt_update->close();
 

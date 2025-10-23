@@ -114,3 +114,4 @@ $posts = $conn->query($posts_query);
 
 <?php include 'includes/footer.php'; ?>
 
+
