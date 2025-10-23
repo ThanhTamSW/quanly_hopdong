@@ -53,7 +53,10 @@ $headers = [
     'F1' => 'Số Buổi',
     'G1' => 'Giá Gốc',
     'H1' => 'Giảm Giá (%)',
-    'I1' => 'Giá Cuối'
+    'I1' => 'Giá Cuối',
+    'J1' => 'Loại TT (full/installment)',
+    'K1' => 'Số Đợt Trả',
+    'L1' => 'Tiền Đặt Cọc/Trả Trước'
 ];
 
 foreach ($headers as $cell => $value) {
@@ -71,6 +74,9 @@ $sheet->getColumnDimension('F')->setWidth(10);
 $sheet->getColumnDimension('G')->setWidth(15);
 $sheet->getColumnDimension('H')->setWidth(12);
 $sheet->getColumnDimension('I')->setWidth(15);
+$sheet->getColumnDimension('J')->setWidth(22);
+$sheet->getColumnDimension('K')->setWidth(12);
+$sheet->getColumnDimension('L')->setWidth(20);
 
 // Add sample data with coaches from database
 $coaches_result = $conn->query("SELECT full_name, phone_number FROM users WHERE role = 'coach' LIMIT 3");
@@ -80,9 +86,9 @@ while ($coach = $coaches_result->fetch_assoc()) {
 }
 
 $sampleData = [
-    ['Nguyễn Văn A', '0901234567', '', '', '01/01/2025', 12, 6000000, 10, 5400000],
-    ['Trần Thị B', '0912345678', '', '', '05/01/2025', 24, 11000000, 15, 9350000],
-    ['Lê Văn C', '0923456789', '', '', '10/01/2025', 36, 15000000, 20, 12000000]
+    ['Nguyễn Văn A', '0901234567', '', '', '01/01/2025', 12, 6000000, 10, 5400000, 'full', 1, 0],
+    ['Trần Thị B', '0912345678', '', '', '05/01/2025', 24, 11000000, 15, 9350000, 'installment', 3, 3000000],
+    ['Lê Văn C', '0923456789', '', '', '10/01/2025', 36, 15000000, 20, 12000000, 'installment', 4, 4000000]
 ];
 
 // Fill in coach data for samples
@@ -96,7 +102,7 @@ foreach ($sampleData as $i => $row) {
     $sheet->fromArray($row, null, 'A' . $rowNum);
     
     // Style data rows
-    $sheet->getStyle('A' . $rowNum . ':I' . $rowNum)->applyFromArray([
+    $sheet->getStyle('A' . $rowNum . ':L' . $rowNum)->applyFromArray([
         'borders' => [
             'allBorders' => [
                 'borderStyle' => Border::BORDER_THIN,
@@ -129,14 +135,27 @@ $instructions = [
     ['   - Tên Coach: Chỉ để tham khảo'],
     ['   - Giảm Giá (%): Mặc định 0'],
     ['   - Giá Cuối: Tự động tính nếu để trống'],
+    ['   - Loại TT: "full" (trả 1 lần) hoặc "installment" (trả góp), mặc định "full"'],
+    ['   - Số Đợt Trả: Số lần trả (2, 3, 4...), mặc định 1'],
+    ['   - Tiền Đặt Cọc: Tiền trả trước (nếu trả góp), mặc định 0'],
     [''],
     ['4. LƯU Ý QUAN TRỌNG:'],
     ['   ⚠️ Số điện thoại coach PHẢI tồn tại trong hệ thống'],
     ['   ⚠️ Hệ thống sẽ tự động tạo tài khoản cho học viên mới'],
     ['   ⚠️ Mật khẩu mặc định = Số điện thoại'],
     ['   ⚠️ Hợp đồng trùng lặp sẽ được bỏ qua'],
+    ['   ⚠️ Nếu chọn trả góp, hệ thống sẽ tự động tạo lịch trả góp'],
+    ['   ⚠️ Số đợt trả > 1 thì Loại TT phải là "installment"'],
     [''],
-    ['5. DANH SÁCH COACH HIỆN TẠI:'],
+    ['5. VÍ DỤ TRẢ GÓP:'],
+    ['   - Giá cuối: 12,000,000 VNĐ'],
+    ['   - Số đợt trả: 4'],
+    ['   - Tiền đặt cọc: 4,000,000 VNĐ'],
+    ['   → Còn lại: 8,000,000 VNĐ chia 3 đợt = 2,666,667 VNĐ/đợt'],
+    ['   → Đợt 1: Ngày ký (4,000,000)'],
+    ['   → Đợt 2-4: Mỗi tháng (2,666,667)'],
+    [''],
+    ['6. DANH SÁCH COACH HIỆN TẠI:'],
     ['   Tên Coach | SĐT Coach']
 ];
 
