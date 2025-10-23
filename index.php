@@ -139,11 +139,6 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
                   <a class="btn btn-success flex-grow-1 flex-md-grow-0" href="add_contract.php">
                       <i class="bi bi-plus-circle"></i> Thêm hợp đồng
                   </a>
-                  <?php if ($_SESSION['role'] === 'admin'): ?>
-                  <a class="btn btn-primary flex-grow-1 flex-md-grow-0" href="import_contracts.php">
-                      <i class="bi bi-cloud-upload"></i> Import Excel
-                  </a>
-                  <?php endif; ?>
             </div>
             <div class="col-12 col-md">
                 <form method="GET" action="index.php" class="d-flex gap-2">

@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS installments (
     INDEX idx_due_date (due_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Thêm các cột mới vào bảng contracts nếu chưa có
+-- Thêm các cột mới vào bảng contracts (bỏ qua nếu đã tồn tại)
 ALTER TABLE contracts 
-ADD COLUMN IF NOT EXISTS payment_type ENUM('full', 'installment') DEFAULT 'full' COMMENT 'Loại thanh toán',
-ADD COLUMN IF NOT EXISTS number_of_installments INT DEFAULT 1 COMMENT 'Số đợt trả',
-ADD COLUMN IF NOT EXISTS first_payment DECIMAL(15,2) DEFAULT 0 COMMENT 'Tiền đặt cọc/trả trước';
+ADD COLUMN payment_type ENUM('full', 'installment') DEFAULT 'full' COMMENT 'Loại thanh toán',
+ADD COLUMN number_of_installments INT DEFAULT 1 COMMENT 'Số đợt trả',
+ADD COLUMN first_payment DECIMAL(15,2) DEFAULT 0 COMMENT 'Tiền đặt cọc/trả trước';
 
