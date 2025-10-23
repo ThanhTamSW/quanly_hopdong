@@ -120,6 +120,9 @@ $page_title = "Import Hợp Đồng";
                                         <th>Giá gốc</th>
                                         <th>Giảm giá (%)</th>
                                         <th>Giá cuối</th>
+                                        <th>Loại TT</th>
+                                        <th>Số đợt</th>
+                                        <th>Đặt cọc</th>
                                         <th>Trạng thái</th>
                                     </tr>
                                 </thead>
@@ -232,6 +235,10 @@ function displayPreview(data, stats) {
         tr.className = row.status === 'error' ? 'table-danger' : 
                        row.status === 'duplicate' ? 'table-warning' : '';
         
+        const paymentTypeLabel = row.payment_type === 'installment' ? 
+            '<span class="badge bg-info">Trả góp</span>' : 
+            '<span class="badge bg-secondary">Trả 1 lần</span>';
+        
         tr.innerHTML = `
             <td>${index + 1}</td>
             <td>${row.client_name}</td>
@@ -242,6 +249,9 @@ function displayPreview(data, stats) {
             <td>${formatNumber(row.total_price)}</td>
             <td>${row.discount_percentage}%</td>
             <td>${formatNumber(row.final_price)}</td>
+            <td>${paymentTypeLabel}</td>
+            <td>${row.number_of_installments || 1}</td>
+            <td>${formatNumber(row.first_payment || 0)}</td>
             <td>
                 ${row.status === 'valid' ? '<span class="badge bg-success">Hợp lệ</span>' :
                   row.status === 'duplicate' ? '<span class="badge bg-warning">Trùng</span>' :

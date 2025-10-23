@@ -81,6 +81,9 @@ try {
             'total_price' => (float)($row[6] ?? 0),
             'discount_percentage' => (float)($row[7] ?? 0),
             'final_price' => (float)($row[8] ?? 0),
+            'payment_type' => strtolower(trim($row[9] ?? 'full')),
+            'number_of_installments' => (int)($row[10] ?? 1),
+            'first_payment' => (float)($row[11] ?? 0),
             'status' => 'valid',
             'error' => ''
         ];
@@ -131,6 +134,28 @@ try {
         // Calculate final price if not provided
         if ($rowData['final_price'] <= 0) {
             $rowData['final_price'] = $rowData['total_price'] * (1 - $rowData['discount_percentage'] / 100);
+        }
+        
+        // Validate payment type
+        if (!in_array($rowData['payment_type'], ['full', 'installment'])) {
+            $rowData['payment_type'] = 'full';
+        }
+        
+        // Validate installment data
+        if ($rowData['payment_type'] === 'installment') {
+            if ($rowData['number_of_installments'] < 2) {
+                $errors[] = 'Trả góp phải có ít nhất 2 đợt';
+            }
+            if ($rowData['first_payment'] >= $rowData['final_price']) {
+                $errors[] = 'Tiền đặt cọc phải nhỏ hơn giá cuối';
+            }
+            if ($rowData['first_payment'] < 0) {
+                $rowData['first_payment'] = 0;
+            }
+        } else {
+            // Force full payment values
+            $rowData['number_of_installments'] = 1;
+            $rowData['first_payment'] = 0;
         }
         
         // Check duplicate
