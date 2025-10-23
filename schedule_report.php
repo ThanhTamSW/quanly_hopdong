@@ -15,20 +15,18 @@ $coach_name = $_SESSION['full_name'];
 
 // Lấy tham số ngày
 $date_param = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+
+// Include header
+include 'includes/header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Báo cáo lịch dạy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<style>
+    /* Override body background cho trang này */
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
         .container {
             padding-top: 50px;
         }
@@ -118,8 +116,6 @@ $date_param = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
     </style>
 </head>
 <body>
-    <a href="coach_schedule.php" class="btn btn-secondary back-btn">⬅️ Quay lại</a>
-    
     <div class="container">
         <div class="report-card">
             <h2 class="title text-center">📊 Báo cáo lịch dạy</h2>
@@ -238,5 +234,5 @@ $date_param = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
             });
         }
     </script>
-</body>
-</html>
+
+<?php include 'includes/footer.php'; ?>

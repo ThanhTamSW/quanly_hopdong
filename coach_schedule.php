@@ -62,23 +62,18 @@ for ($h = 7; $h <= 20; $h++) {
     $time_slots[] = str_pad($h, 2, '0', STR_PAD_LEFT) . ':00';
 }
 $days_of_week = [1 => 'Thứ Hai', 2 => 'Thứ Ba', 3 => 'Thứ Tư', 4 => 'Thứ Năm', 5 => 'Thứ Sáu', 6 => 'Thứ Bảy', 7 => 'Chủ Nhật'];
+
+// Include header với navigation
+include 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Lịch dạy Toàn bộ Coach</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <h2 class="mb-2 mb-md-0">🗓️ Lịch dạy Toàn bộ Coach</h2>
-            <div class="d-flex gap-2">
-                <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-success">📊 Xuất báo cáo lịch</a>
-                <a href="index.php" class="btn btn-secondary">⬅️ Quay lại</a>
-            </div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+        <h2 class="mb-2 mb-md-0">🗓️ Lịch dạy Toàn bộ Coach</h2>
+        <div class="d-flex gap-2">
+            <a href="schedule_report.php?date=<?= date('Y-m-d') ?>" class="btn btn-success">📊 Xuất báo cáo lịch</a>
         </div>
+    </div>
         
         <div class="card shadow-sm mt-3">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -131,8 +126,6 @@ $days_of_week = [1 => 'Thứ Hai', 2 => 'Thứ Ba', 3 => 'Thứ Tư', 4 => 'Th�
                 </table>
             </div>
         </div>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+
+<?php include 'includes/footer.php'; ?>
