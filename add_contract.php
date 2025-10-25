@@ -153,8 +153,13 @@ $packages = [
             
             <div class="col-12">
                 <div class="alert alert-info">
-                    <strong>💡 Hướng dẫn:</strong> Bạn có thể tạo nhiều nhóm lịch tập khác nhau cho từng giai đoạn.<br>
-                    <em>Ví dụ: Tháng 11-12 tập Thứ 2-4-6, từ tháng 1 trở đi tập Thứ 3-5-7.</em>
+                    <strong>💡 Hướng dẫn:</strong> 
+                    <ul class="mb-0 mt-2">
+                        <li>Chọn <strong>thứ và giờ tập</strong> để tự động tạo lịch</li>
+                        <li><strong>"Từ ngày"</strong> để trống → tự động dùng ngày bắt đầu hợp đồng</li>
+                        <li>Có thể tạo nhiều nhóm lịch khác nhau cho từng giai đoạn</li>
+                        <li><em>VD: Tháng 11-12 tập T2-T4-T6, từ tháng 1 tập T3-T5-T7</em></li>
+                    </ul>
                 </div>
             </div>
 
@@ -168,13 +173,14 @@ $packages = [
                     <div class="card-body">
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label">Từ ngày</label>
+                                <label class="form-label">Từ ngày (tùy chọn)</label>
                                 <input type="date" name="schedule_group_start[]" class="form-control schedule-group-start">
+                                <div class="form-text">Để trống = dùng ngày bắt đầu hợp đồng</div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Đến ngày (tùy chọn)</label>
                                 <input type="date" name="schedule_group_end[]" class="form-control">
-                                <div class="form-text">Để trống nếu áp dụng đến hết hợp đồng</div>
+                                <div class="form-text">Để trống = áp dụng đến hết hợp đồng</div>
                             </div>
                         </div>
                         
@@ -379,19 +385,6 @@ $packages = [
 
     discountSelect.addEventListener('change', calculateFinalPrice);
     totalPriceInput.addEventListener('input', calculateFinalPrice);
-
-    // Set default start date for first schedule group
-    const firstGroupStart = document.querySelector('.schedule-group-start');
-    if (firstGroupStart) {
-        firstGroupStart.value = contractStartDate.value;
-    }
-    
-    contractStartDate.addEventListener('change', function() {
-        const firstGroupStart = document.querySelector('.schedule-group-start');
-        if (firstGroupStart && !firstGroupStart.value) {
-            firstGroupStart.value = this.value;
-        }
-    });
 
     let scheduleGroupCounter = 0;
 
