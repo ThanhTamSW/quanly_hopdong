@@ -1,6 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
+if (!isset($_SESSION['user_id'])) {
+    die("Bạn cần đăng nhập để thực hiện thao tác này.");
+}
+
+// Cho phép cả admin và coach cập nhật hợp đồng
+if (!in_array($_SESSION['role'], ['admin', 'coach'])) {
     die("Bạn không có quyền truy cập.");
 }
 include '../includes/db.php';
@@ -18,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $final_price = intval($_POST['final_price']);
 
         $stmt_update = $conn->prepare("UPDATE contracts SET coach_id = ?, start_date = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
-        $stmt_update->bind_param("isiiiiii", $coach_id, $start_date_str, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
+        $stmt_update->bind_param("isidddi", $coach_id, $start_date_str, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
         $stmt_update->execute();
         $stmt_update->close();
 
