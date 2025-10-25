@@ -24,9 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $total_sessions = intval($_POST['total_sessions']);
     
     // CẬP NHẬT: Lấy đầy đủ thông tin giá và giảm giá
-    $total_price = intval($_POST['total_price']);
+    $total_price = floatval($_POST['total_price']);
     $discount_percentage = intval($_POST['discount_percentage']);
-    $final_price = intval($_POST['final_price']);
+    $final_price = floatval($_POST['final_price']);
     
     // Lấy thông tin thanh toán
     $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : 'full';
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             for ($i = 0; $i < count($installment_percentages); $i++) {
                 $installment_number = $i + 1;
                 $percentage = floatval($installment_percentages[$i]);
-                $amount = intval($installment_amounts[$i]);
+                $amount = floatval($installment_amounts[$i]);
                 $due_date = !empty($installment_dates[$i]) ? $installment_dates[$i] : null;
                 
                 if ($percentage > 0 && $amount > 0) {

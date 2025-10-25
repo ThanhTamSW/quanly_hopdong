@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $start_date_str = $_POST['start_date'];
         // ĐÃ XÓA: package_name - Không cần cập nhật tên gói
         $total_sessions = intval($_POST['total_sessions']);
-        $total_price = intval($_POST['total_price']);
+        $total_price = floatval($_POST['total_price']);
         $discount_percentage = intval($_POST['discount_percentage']);
-        $final_price = intval($_POST['final_price']);
+        $final_price = floatval($_POST['final_price']);
 
         $stmt_update = $conn->prepare("UPDATE contracts SET coach_id = ?, start_date = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
         $stmt_update->bind_param("isidddi", $coach_id, $start_date_str, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
