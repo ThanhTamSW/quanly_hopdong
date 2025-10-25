@@ -37,10 +37,10 @@ $posts = $conn->query($posts_query);
     <?php if ($posts && $posts->num_rows > 0): ?>
         <div class="row g-4">
             <?php while ($post = $posts->fetch_assoc()): ?>
-                <div class="col-md-4">
+                <div class="col-12 col-sm-6 col-lg-4">
                     <div class="card h-100 shadow-sm hover-lift" style="transition: transform 0.3s;">
                         <?php if ($post['featured_image']): ?>
-                            <img src="<?= htmlspecialchars($post['featured_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>">
+                            <img src="<?= htmlspecialchars($post['featured_image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($post['title']) ?>" style="height: 200px; object-fit: cover;">
                         <?php else: ?>
                             <div class="card-img-top bg-gradient text-white d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                 <h3 class="text-center px-3"><?= htmlspecialchars(mb_substr($post['title'], 0, 50)) ?></h3>

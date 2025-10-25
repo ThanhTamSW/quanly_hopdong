@@ -186,7 +186,7 @@ function parseMarkdown($text) {
             <?php endif; ?>
             
             <!-- Action Buttons -->
-            <div class="mb-3 d-flex gap-2 justify-content-end">
+            <div class="mb-3 d-flex flex-column flex-sm-row gap-2 justify-content-end">
                 <button onclick="copyContent()" class="btn btn-primary btn-sm">
                     📋 Copy nội dung
                 </button>
@@ -209,16 +209,14 @@ function parseMarkdown($text) {
             <!-- Footer -->
             <hr class="my-5">
             
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="blog.php" class="btn btn-outline-primary">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <a href="blog.php" class="btn btn-outline-primary w-100 w-sm-auto">
                     ← Quay lại Blog
                 </a>
                 
-                <div>
-                    <button class="btn btn-outline-secondary" onclick="window.print()">
-                        🖨️ In bài viết
-                    </button>
-                </div>
+                <button class="btn btn-outline-secondary w-100 w-sm-auto" onclick="window.print()">
+                    🖨️ In bài viết
+                </button>
             </div>
             
             <!-- Related Posts -->
@@ -238,7 +236,7 @@ function parseMarkdown($text) {
                     <h3 class="mb-4">📖 Bài viết liên quan</h3>
                     <div class="row g-3">
                         <?php while ($rel = $related->fetch_assoc()): ?>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <h6 class="card-title"><?= htmlspecialchars($rel['title']) ?></h6>
