@@ -102,7 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Xử lý từng nhóm lịch
         for ($group_idx = 0; $group_idx < count($schedule_group_starts); $group_idx++) {
-            $group_start = $schedule_group_starts[$group_idx];
+            // Nếu không điền "Từ ngày", tự động dùng ngày bắt đầu hợp đồng
+            $group_start = !empty($schedule_group_starts[$group_idx]) ? $schedule_group_starts[$group_idx] : $start_date_str;
             $group_end = !empty($schedule_group_ends[$group_idx]) ? $schedule_group_ends[$group_idx] : null;
             
             // Lấy days và times cho nhóm này
@@ -124,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
             
-            if (empty($schedule_map) || empty($group_start)) {
-                continue; // Bỏ qua nhóm không hợp lệ
+            if (empty($schedule_map)) {
+                continue; // Bỏ qua nhóm không có thứ/giờ
             }
             
             // Tạo lịch cho nhóm này
