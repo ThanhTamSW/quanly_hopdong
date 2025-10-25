@@ -234,7 +234,7 @@ $posts = $conn->query($posts_query);
     
     <!-- Danh sách bài viết -->
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
             <h4 class="mb-0">📝 Danh sách bài viết</h4>
             <a href="blog.php" class="btn btn-light btn-sm">👁️ Xem Blog công khai</a>
         </div>
@@ -245,11 +245,11 @@ $posts = $conn->query($posts_query);
                         <thead>
                             <tr>
                                 <th>Tiêu đề</th>
-                                <th>Tác giả</th>
+                                <th class="d-none d-md-table-cell">Tác giả</th>
                                 <th>Trạng thái</th>
-                                <th>AI</th>
-                                <th>Lượt xem</th>
-                                <th>Ngày tạo</th>
+                                <th class="d-none d-lg-table-cell">AI</th>
+                                <th class="d-none d-lg-table-cell">Lượt xem</th>
+                                <th class="d-none d-md-table-cell">Ngày tạo</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -257,7 +257,7 @@ $posts = $conn->query($posts_query);
                             <?php while ($post = $posts->fetch_assoc()): ?>
                                 <tr>
                                     <td><strong><?= htmlspecialchars($post['title']) ?></strong></td>
-                                    <td><?= htmlspecialchars($post['author_name']) ?></td>
+                                    <td class="d-none d-md-table-cell"><?= htmlspecialchars($post['author_name']) ?></td>
                                     <td>
                                         <?php
                                         $status_badges = [
@@ -268,14 +268,22 @@ $posts = $conn->query($posts_query);
                                         echo $status_badges[$post['status']];
                                         ?>
                                     </td>
-                                    <td><?= $post['ai_generated'] ? '🤖 AI' : '✍️ Thủ công' ?></td>
-                                    <td><?= number_format($post['views']) ?></td>
-                                    <td><?= date('d/m/Y', strtotime($post['created_at'])) ?></td>
+                                    <td class="d-none d-lg-table-cell"><?= $post['ai_generated'] ? '🤖 AI' : '✍️ Thủ công' ?></td>
+                                    <td class="d-none d-lg-table-cell"><?= number_format($post['views']) ?></td>
+                                    <td class="d-none d-md-table-cell"><?= date('d/m/Y', strtotime($post['created_at'])) ?></td>
                                     <td>
-                                        <a href="blog_edit.php?id=<?= $post['id'] ?>" class="btn btn-sm btn-warning">✏️ Sửa</a>
-                                        <a href="blog_post.php?slug=<?= $post['slug'] ?>" class="btn btn-sm btn-info" target="_blank">👁️ Xem</a>
-                                        <button onclick="copyPostContent(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['content'])) ?>')" class="btn btn-sm btn-success">📋 Copy</button>
-                                        <button onclick="deletePost(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['title'])) ?>')" class="btn btn-sm btn-danger">🗑️ Xóa</button>
+                                        <div class="btn-group-vertical btn-group-sm d-md-none" role="group">
+                                            <a href="blog_edit.php?id=<?= $post['id'] ?>" class="btn btn-warning btn-sm">✏️</a>
+                                            <a href="blog_post.php?slug=<?= $post['slug'] ?>" class="btn btn-info btn-sm" target="_blank">👁️</a>
+                                            <button onclick="copyPostContent(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['content'])) ?>')" class="btn btn-success btn-sm">📋</button>
+                                            <button onclick="deletePost(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['title'])) ?>')" class="btn btn-danger btn-sm">🗑️</button>
+                                        </div>
+                                        <div class="d-none d-md-block">
+                                            <a href="blog_edit.php?id=<?= $post['id'] ?>" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                                            <a href="blog_post.php?slug=<?= $post['slug'] ?>" class="btn btn-sm btn-info" target="_blank">👁️ Xem</a>
+                                            <button onclick="copyPostContent(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['content'])) ?>')" class="btn btn-sm btn-success">📋 Copy</button>
+                                            <button onclick="deletePost(<?= $post['id'] ?>, '<?= htmlspecialchars(addslashes($post['title'])) ?>')" class="btn btn-sm btn-danger">🗑️ Xóa</button>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
