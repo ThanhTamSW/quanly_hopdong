@@ -223,6 +223,7 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
         <th style="min-width: 120px;">Thanh toán</th>
         <th style="min-width: 80px;">Giảm giá</th>
         <th style="min-width: 90px;">Giá/buổi</th>
+        <th style="min-width: 180px;">Hành động</th>
       </tr>
     </thead>
     <tbody>
@@ -259,10 +260,22 @@ $search_query_param = !empty($search_term) ? '&search=' . urlencode($search_term
           </td>
           <td><?= ($row['discount_percentage'] > 0) ? $row['discount_percentage'] . '%' : '-' ?></td>
           <td><?= number_format($price_per_session, 0, ',', '.') ?>đ</td>
+          <td>
+            <div class="btn-group-vertical btn-group-sm d-md-none" role="group">
+              <a href="view_sessions.php?contract_id=<?= $row['id'] ?>" class="btn btn-info btn-sm">📅 Lịch</a>
+              <a href="edit_contract.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">✏️ Sửa</a>
+              <button onclick="deleteContract(<?= $row['id'] ?>, '<?= htmlspecialchars(addslashes($row['client_name'])) ?>')" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+            </div>
+            <div class="d-none d-md-block">
+              <a href="view_sessions.php?contract_id=<?= $row['id'] ?>" class="btn btn-info btn-sm">📅 Quản lý lịch</a>
+              <a href="edit_contract.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">✏️ Sửa</a>
+              <button onclick="deleteContract(<?= $row['id'] ?>, '<?= htmlspecialchars(addslashes($row['client_name'])) ?>')" class="btn btn-danger btn-sm">🗑️ Xóa</button>
+            </div>
+          </td>
         </tr>
         <?php endforeach; ?>
     <?php else: ?>
-        <tr><td colspan="12" class="text-center">Không tìm thấy hợp đồng nào.</td></tr>
+        <tr><td colspan="13" class="text-center">Không tìm thấy hợp đồng nào.</td></tr>
     <?php endif; ?>
     </tbody>
   </table>
@@ -322,6 +335,24 @@ function copyScheduleLink(contractId) {
     }, function(err) {
         alert('Lỗi khi sao chép link.');
     });
+}
+
+function deleteContract(contractId, clientName) {
+    if (confirm('Bạn có chắc chắn muốn xóa hợp đồng của "' + clientName + '"?\n\nHành động này không thể hoàn tác!')) {
+        // Tạo form ẩn để submit
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'actions/delete_contract.php';
+        
+        const inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = 'contract_id';
+        inputId.value = contractId;
+        
+        form.appendChild(inputId);
+        document.body.appendChild(form);
+        form.submit();
+    }
 }
 </script>
 
