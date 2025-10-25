@@ -1,6 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
+if (!isset($_SESSION['user_id'])) {
+    die("Bạn cần đăng nhập để thực hiện thao tác này.");
+}
+
+// Cho phép cả admin và coach thêm hợp đồng
+if (!in_array($_SESSION['role'], ['admin', 'coach'])) {
     die("Bạn không có quyền truy cập.");
 }
 
@@ -60,11 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("ID của học viên không hợp lệ.");
         }
 
-        // === BƯỚC 2: TẠO HỢP ĐỒNG (KHÔNG LƯU PACKAGE_NAME) ===
-        $package_name_null = NULL; // Để NULL - không cần lưu tên gói
+        // === BƯỚC 2: TẠO HỢP ĐỒNG ===
+        // Tạo tên gói tự động dựa trên số buổi
+        $package_name = "Gói $total_sessions buổi";
         
         $stmt_contract = $conn->prepare("INSERT INTO contracts (client_id, coach_id, start_date, package_name, total_sessions, total_price, discount_percentage, final_price, payment_type, paid_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
-        $stmt_contract->bind_param("iissiiiisi", $client_id_for_contract, $coach_id, $start_date_str, $package_name_null, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
+        $stmt_contract->bind_param("iissiiiisi", $client_id_for_contract, $coach_id, $start_date_str, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
         $stmt_contract->execute();
         $new_contract_id = $stmt_contract->insert_id;
         $stmt_contract->close();
