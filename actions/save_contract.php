@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $package_name = "Gói $total_sessions buổi";
         
         $stmt_contract = $conn->prepare("INSERT INTO contracts (client_id, coach_id, start_date, package_name, total_sessions, total_price, discount_percentage, final_price, payment_type, paid_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
-        $stmt_contract->bind_param("iissiiiisi", $client_id_for_contract, $coach_id, $start_date_str, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
+        $stmt_contract->bind_param("iissiddisi", $client_id_for_contract, $coach_id, $start_date_str, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
         $stmt_contract->execute();
         $new_contract_id = $stmt_contract->insert_id;
         $stmt_contract->close();
