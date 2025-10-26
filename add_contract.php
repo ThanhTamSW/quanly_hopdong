@@ -72,7 +72,8 @@ $packages = [
             </div>
             <div class="col-md-6">
                 <label for="final_price" class="form-label">Thành tiền (VNĐ)</label>
-                <input type="number" name="final_price" id="final_price" class="form-control" readonly style="font-weight: bold; color: #0d6efd;">
+                <input type="text" id="final_price_display" class="form-control" style="font-weight: bold; color: #0d6efd; background-color: #e9ecef;" readonly>
+                <input type="hidden" name="final_price" id="final_price" required>
             </div>
 
             <hr class="my-4 col-12">
@@ -246,7 +247,12 @@ $packages = [
         const price = parseFloat(totalPriceInput.value) || 0;
         const discount = parseFloat(discountSelect.value) || 0;
         const finalPrice = price * (1 - discount / 100);
-        finalPriceInput.value = Math.round(finalPrice);
+        const roundedPrice = Math.round(finalPrice);
+        
+        // Set both display and hidden input
+        document.getElementById('final_price_display').value = roundedPrice.toLocaleString('vi-VN');
+        finalPriceInput.value = roundedPrice;
+        
         calculateInstallments();
     }
     
