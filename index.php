@@ -8,7 +8,7 @@ $isCoach = ($_SESSION['role'] === 'coach');
 $user_role = $_SESSION['role'];
 
 // LẤY DANH SÁCH TẤT CẢ COACH ĐỂ TẠO TAB
-$coaches_result = $conn->query("SELECT id, full_name FROM users WHERE role = 'coach' ORDER BY full_name");
+$coaches_result = $conn->query("SELECT id, name as full_name FROM coaches ORDER BY name");
 $coaches_list = [];
 while($coach = $coaches_result->fetch_assoc()) {
     $coaches_list[] = $coach;
@@ -83,7 +83,7 @@ if ($active_coach_id !== 'all') {
 $search_term = isset($_GET['search']) ? trim($_GET['search']) : '';
 if (!empty($search_term)) {
     $like_term = "%" . $search_term . "%";
-    $search_clause = "(client.full_name LIKE ? OR client.phone_number LIKE ? OR coach.full_name LIKE ?)";
+    $search_clause = "(client.full_name LIKE ? OR client.phone_number LIKE ? OR coach.name LIKE ?)";
     if (empty($sql_where_clause)) {
         $sql_where_clause = "WHERE " . $search_clause;
     } else {
@@ -97,12 +97,12 @@ $sql = "
     SELECT 
         c.id, c.start_date, c.package_name, c.total_sessions, c.total_price, c.discount_percentage, c.final_price,
         client.full_name AS client_name, client.phone_number AS client_phone,
-        coach.full_name AS coach_name,
+        coach.name AS coach_name,
         (SELECT COUNT(id) FROM training_sessions WHERE contract_id = c.id AND status = 'completed') AS sessions_completed,
         DATE_ADD(c.start_date, INTERVAL CEIL(c.total_sessions / 3) WEEK) AS end_date_estimated
     FROM contracts c
     JOIN users client ON c.client_id = client.id
-    JOIN users coach ON c.coach_id = coach.id
+    JOIN coaches coach ON c.new_coach_id = coach.id
     $sql_where_clause
     ORDER BY c.start_date DESC
 ";

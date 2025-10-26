@@ -21,7 +21,7 @@ if (!$contract) {
     die("Không tìm thấy hợp đồng.");
 }
 
-$coaches = $conn->query("SELECT id, full_name FROM users WHERE role = 'coach' ORDER BY full_name");
+$coaches = $conn->query("SELECT id, name as full_name FROM coaches ORDER BY name");
 
 $client_stmt = $conn->prepare("SELECT full_name FROM users WHERE id = ?");
 $client_stmt->bind_param("i", $contract['client_id']);

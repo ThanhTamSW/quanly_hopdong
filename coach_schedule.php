@@ -31,11 +31,11 @@ $sql = "
     SELECT 
         ts.session_datetime,
         client.full_name AS client_name,
-        coach.full_name AS coach_name 
+        coach.name AS coach_name 
     FROM training_sessions ts
     JOIN contracts c ON ts.contract_id = c.id
     JOIN users client ON c.client_id = client.id
-    JOIN users coach ON c.coach_id = coach.id 
+    JOIN coaches coach ON c.new_coach_id = coach.id 
     WHERE ts.status = 'scheduled'
       AND DATE(ts.session_datetime) BETWEEN ? AND ? 
 ";
