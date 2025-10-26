@@ -16,8 +16,7 @@ $nav_items = [
     'add_contract_text.php' => '🤖 Thêm nhanh (AI)',
     'payment_installments.php' => '💰 Quản lý Trả góp',
     'manage_targets.php' => '🎯 Quản lý Target',
-    'blog_admin.php' => '🤖 Blog AI',
-    'blog.php' => '📚 Xem Blog'
+    'blog_admin.php' => '🤖 Blog AI'
 ];
 
 // Nếu file này được gọi từ một trang yêu cầu đăng nhập, hãy kiểm tra session
