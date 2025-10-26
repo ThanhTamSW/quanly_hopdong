@@ -50,7 +50,7 @@ $client_stmt->close();
                 <label for="coach_id" class="form-label">Huấn luyện viên</label>
                 <select name="coach_id" id="coach_id" class="form-select" required>
                     <?php mysqli_data_seek($coaches, 0); while($coach = $coaches->fetch_assoc()): ?>
-                        <option value="<?= $coach['id'] ?>" <?= ($coach['id'] == $contract['coach_id']) ? 'selected' : '' ?>>
+                        <option value="<?= $coach['id'] ?>" <?= ($coach['id'] == $contract['new_coach_id']) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($coach['full_name']) ?>
                         </option>
                     <?php endwhile; ?>
