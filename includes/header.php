@@ -13,6 +13,7 @@ $nav_items = [
     'index.php' => 'Quản lý Hợp đồng',
     'coach_schedule.php' => 'Lịch dạy',
     'add_contract.php' => 'Thêm Hợp đồng',
+    'add_contract_text.php' => '🤖 Thêm nhanh (AI)',
     'payment_installments.php' => '💰 Quản lý Trả góp',
     'manage_targets.php' => '🎯 Quản lý Target',
     'blog_admin.php' => '🤖 Blog AI',
