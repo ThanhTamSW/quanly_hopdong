@@ -67,6 +67,42 @@ $days_of_week = [1 => 'Thứ Hai', 2 => 'Thứ Ba', 3 => 'Thứ Tư', 4 => 'Th�
 include 'includes/header.php';
 ?>
 
+<style>
+    /* Sticky column cho cột Giờ */
+    .table thead th:first-child,
+    .table tbody td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: #fff;
+        z-index: 10;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    .table thead th:first-child {
+        background-color: #212529;
+        color: white;
+        z-index: 11;
+    }
+    
+    /* Responsive cho mobile */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        
+        .table td, .table th {
+            font-size: 0.85rem;
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .alert-info {
+            font-size: 0.8rem;
+            padding: 0.25rem !important;
+        }
+    }
+</style>
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
         <h2 class="mb-2 mb-md-0">🗓️ Lịch dạy Toàn bộ Coach</h2>
@@ -83,8 +119,8 @@ include 'includes/header.php';
                 </h5>
                 <a href="?date=<?= $next_week->format('Y-m-d') ?>" class="btn btn-outline-primary">Tuần sau &raquo;</a>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered text-center mb-0">
+            <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table class="table table-bordered text-center mb-0" style="min-width: 800px;">
                     <thead class="table-dark">
                         <tr>
                             <th>Giờ</th>
@@ -98,7 +134,7 @@ include 'includes/header.php';
                             <tr>
                                 <td><strong><?= $time_slot ?></strong></td>
                                 <?php foreach ($days_of_week as $day_num => $day_name): ?>
-                                    <td style="vertical-align: top; min-width: 150px;">
+                                    <td style="vertical-align: top; min-width: 120px; max-width: 180px;">
                                         <?php 
                                         if (!empty($schedule[$day_num])) {
                                             ksort($schedule[$day_num]);
