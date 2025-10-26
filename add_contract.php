@@ -239,7 +239,6 @@ $packages = [
     const customPackageWrapper = document.getElementById('custom_package_wrapper');
     const customPackageInput = document.getElementById('custom_package_name');
     const contractStartDate = document.getElementById('start_date');
-    const scheduleStartDate = document.getElementById('schedule_start_date');
     
     // Payment type elements
     const paymentFull = document.getElementById('payment_full');
@@ -262,18 +261,22 @@ $packages = [
     }
     
     // Toggle payment section
-    paymentFull.addEventListener('change', function() {
-        if (this.checked) {
-            installmentSection.style.display = 'none';
-        }
-    });
+    if (paymentFull) {
+        paymentFull.addEventListener('change', function() {
+            if (this.checked) {
+                installmentSection.style.display = 'none';
+            }
+        });
+    }
     
-    paymentInstallment.addEventListener('change', function() {
-        if (this.checked) {
-            installmentSection.style.display = 'block';
-            calculateInstallments();
-        }
-    });
+    if (paymentInstallment) {
+        paymentInstallment.addEventListener('change', function() {
+            if (this.checked) {
+                installmentSection.style.display = 'block';
+                calculateInstallments();
+            }
+        });
+    }
     
     // Add new installment row
     function addInstallment() {
@@ -372,30 +375,37 @@ $packages = [
         });
     });
 
-    packageNameSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (this.value === 'other') {
-            customPackageWrapper.style.display = 'block';
-            customPackageInput.required = true;
-            totalSessionsInput.readOnly = false;
-            totalPriceInput.readOnly = false;
-            totalSessionsInput.value = '';
-            totalPriceInput.value = '';
-            totalSessionsInput.focus();
-        } else {
-            customPackageWrapper.style.display = 'none';
-            customPackageInput.required = false;
-            customPackageInput.value = '';
-            totalSessionsInput.value = selectedOption.getAttribute('data-sessions');
-            totalPriceInput.value = selectedOption.getAttribute('data-price');
-            totalSessionsInput.readOnly = true;
-            totalPriceInput.readOnly = true;
-        }
-        calculateFinalPrice();
-    });
+    if (packageNameSelect) {
+        packageNameSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (this.value === 'other') {
+                customPackageWrapper.style.display = 'block';
+                customPackageInput.required = true;
+                totalSessionsInput.readOnly = false;
+                totalPriceInput.readOnly = false;
+                totalSessionsInput.value = '';
+                totalPriceInput.value = '';
+                totalSessionsInput.focus();
+            } else {
+                customPackageWrapper.style.display = 'none';
+                customPackageInput.required = false;
+                customPackageInput.value = '';
+                totalSessionsInput.value = selectedOption.getAttribute('data-sessions');
+                totalPriceInput.value = selectedOption.getAttribute('data-price');
+                totalSessionsInput.readOnly = true;
+                totalPriceInput.readOnly = true;
+            }
+            calculateFinalPrice();
+        });
+    }
 
-    discountSelect.addEventListener('change', calculateFinalPrice);
-    totalPriceInput.addEventListener('input', calculateFinalPrice);
+    if (discountSelect) {
+        discountSelect.addEventListener('change', calculateFinalPrice);
+    }
+    
+    if (totalPriceInput) {
+        totalPriceInput.addEventListener('input', calculateFinalPrice);
+    }
 
     let scheduleGroupCounter = 0;
 
