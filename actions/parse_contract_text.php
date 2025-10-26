@@ -104,13 +104,32 @@ LƯU Ý:
 - Tên HLV phải CHÍNH XÁC khớp với danh sách";
 
 try {
-    // Call AI
-    $result = callAI($prompt, [
-        'temperature' => 0.1, // Low temperature for accuracy
-        'max_tokens' => 1000
-    ]);
+    // Load AI config
+    $config_file = __DIR__ . '/../config.ai.php';
+    if (!file_exists($config_file)) {
+        ob_end_clean();
+        echo json_encode(['success' => false, 'error' => 'Chưa cấu hình AI. Vui lòng tạo file config.ai.php']);
+        exit;
+    }
+    
+    $ai_config = require $config_file;
+    $provider = $ai_config['ai_provider'];
+    
+    // Call AI based on provider
+    if ($provider === 'openai') {
+        $result = callOpenAI($prompt, $ai_config['openai']);
+    } else if ($provider === 'gemini') {
+        $result = callGemini($prompt, $ai_config['gemini']);
+    } else if ($provider === 'groq') {
+        $result = callGroq($prompt, $ai_config['groq']);
+    } else {
+        ob_end_clean();
+        echo json_encode(['success' => false, 'error' => 'AI Provider không hợp lệ: ' . $provider]);
+        exit;
+    }
     
     if (!$result['success']) {
+        ob_end_clean();
         echo json_encode(['success' => false, 'error' => 'AI Error: ' . $result['error']]);
         exit;
     }
