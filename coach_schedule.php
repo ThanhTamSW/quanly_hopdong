@@ -58,7 +58,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $time_slots = [];
-for ($h = 7; $h <= 20; $h++) {
+for ($h = 7; $h <= 21; $h++) {
     $time_slots[] = str_pad($h, 2, '0', STR_PAD_LEFT) . ':00';
 }
 $days_of_week = [1 => 'Thứ Hai', 2 => 'Thứ Ba', 3 => 'Thứ Tư', 4 => 'Thứ Năm', 5 => 'Thứ Sáu', 6 => 'Thứ Bảy', 7 => 'Chủ Nhật'];
