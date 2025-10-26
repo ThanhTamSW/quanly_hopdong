@@ -234,9 +234,8 @@ $posts = $conn->query($posts_query);
     
     <!-- Danh sách bài viết -->
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+        <div class="card-header bg-primary text-white">
             <h4 class="mb-0">📝 Danh sách bài viết</h4>
-            <a href="blog.php" class="btn btn-light btn-sm">👁️ Xem Blog công khai</a>
         </div>
         <div class="card-body">
             <?php if ($posts && $posts->num_rows > 0): ?>
