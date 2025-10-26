@@ -1,6 +1,8 @@
 <?php
 $page_title = 'Thêm Hợp đồng';
 $requires_login = true;
+// Cache busting: Force browser to reload JS/CSS
+$cache_version = '?v=' . filemtime(__FILE__);
 include 'includes/header.php'; 
 include 'includes/db.php';
 
@@ -226,6 +228,9 @@ $packages = [
 </div>
 
 <script>
+    // Cache version: <?= time() ?> - Force browser reload
+    console.log('Form version: <?= date("Y-m-d H:i:s") ?>');
+    
     const packageNameSelect = document.getElementById('package_name');
     const totalSessionsInput = document.getElementById('total_sessions');
     const totalPriceInput = document.getElementById('total_price');
