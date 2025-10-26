@@ -107,8 +107,9 @@ try {
     $payment_type = 'full';
     $paid_amount = 0;
     
-    $stmt_contract = $conn->prepare("INSERT INTO contracts (client_id, coach_id, new_coach_id, start_date, package_name, total_sessions, total_price, discount_percentage, final_price, payment_type, paid_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
-    $stmt_contract->bind_param("iiissiddisi", $client_id, $coach_id, $coach_id, $start_date, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
+    // Chỉ dùng new_coach_id (tham chiếu coaches table), coach_id = NULL
+    $stmt_contract = $conn->prepare("INSERT INTO contracts (client_id, coach_id, new_coach_id, start_date, package_name, total_sessions, total_price, discount_percentage, final_price, payment_type, paid_amount, status) VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active')");
+    $stmt_contract->bind_param("iissiddisi", $client_id, $coach_id, $start_date, $package_name, $total_sessions, $total_price, $discount_percentage, $final_price, $payment_type, $paid_amount);
     
     if (!$stmt_contract->execute()) {
         throw new Exception("Lỗi khi tạo hợp đồng: " . $stmt_contract->error);

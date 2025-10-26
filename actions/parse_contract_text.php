@@ -1,9 +1,20 @@
 <?php
+// Prevent any output before JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ob_start();
+
 session_start();
+
+// Clean any output that might have been generated
+ob_end_clean();
+ob_start();
+
 header('Content-Type: application/json');
 
 // Check login
 if (!isset($_SESSION['user_id'])) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Bạn cần đăng nhập!']);
     exit;
 }
@@ -13,6 +24,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $text = $input['text'] ?? '';
 
 if (empty($text)) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Không có văn bản để phân tích!']);
     exit;
 }
@@ -92,13 +104,32 @@ LƯU Ý:
 - Tên HLV phải CHÍNH XÁC khớp với danh sách";
 
 try {
-    // Call AI
-    $result = callAI($prompt, [
-        'temperature' => 0.1, // Low temperature for accuracy
-        'max_tokens' => 1000
-    ]);
+    // Load AI config
+    $config_file = __DIR__ . '/../config.ai.php';
+    if (!file_exists($config_file)) {
+        ob_end_clean();
+        echo json_encode(['success' => false, 'error' => 'Chưa cấu hình AI. Vui lòng tạo file config.ai.php']);
+        exit;
+    }
+    
+    $ai_config = require $config_file;
+    $provider = $ai_config['ai_provider'];
+    
+    // Call AI based on provider
+    if ($provider === 'openai') {
+        $result = callOpenAI($prompt, $ai_config['openai']);
+    } else if ($provider === 'gemini') {
+        $result = callGemini($prompt, $ai_config['gemini']);
+    } else if ($provider === 'groq') {
+        $result = callGroq($prompt, $ai_config['groq']);
+    } else {
+        ob_end_clean();
+        echo json_encode(['success' => false, 'error' => 'AI Provider không hợp lệ: ' . $provider]);
+        exit;
+    }
     
     if (!$result['success']) {
+        ob_end_clean();
         echo json_encode(['success' => false, 'error' => 'AI Error: ' . $result['error']]);
         exit;
     }
@@ -189,16 +220,25 @@ try {
     }
     
     // Success
+    ob_end_clean();
     echo json_encode([
         'success' => true,
         'data' => $data
     ]);
     
 } catch (Exception $e) {
+    ob_end_clean();
     echo json_encode([
         'success' => false,
         'error' => 'Exception: ' . $e->getMessage()
     ]);
+} catch (Error $e) {
+    ob_end_clean();
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error: ' . $e->getMessage()
+    ]);
 }
+exit;
 ?>
 
