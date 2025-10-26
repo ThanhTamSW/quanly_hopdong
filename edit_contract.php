@@ -21,7 +21,7 @@ if (!$contract) {
     die("Không tìm thấy hợp đồng.");
 }
 
-$coaches = $conn->query("SELECT id, full_name FROM users WHERE role = 'coach' ORDER BY full_name");
+$coaches = $conn->query("SELECT id, name as full_name FROM coaches ORDER BY name");
 
 $client_stmt = $conn->prepare("SELECT full_name FROM users WHERE id = ?");
 $client_stmt->bind_param("i", $contract['client_id']);
@@ -50,7 +50,7 @@ $client_stmt->close();
                 <label for="coach_id" class="form-label">Huấn luyện viên</label>
                 <select name="coach_id" id="coach_id" class="form-select" required>
                     <?php mysqli_data_seek($coaches, 0); while($coach = $coaches->fetch_assoc()): ?>
-                        <option value="<?= $coach['id'] ?>" <?= ($coach['id'] == $contract['coach_id']) ? 'selected' : '' ?>>
+                        <option value="<?= $coach['id'] ?>" <?= ($coach['id'] == $contract['new_coach_id']) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($coach['full_name']) ?>
                         </option>
                     <?php endwhile; ?>

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $discount_percentage = intval($_POST['discount_percentage']);
         $final_price = floatval($_POST['final_price']);
 
-        $stmt_update = $conn->prepare("UPDATE contracts SET coach_id = ?, start_date = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
+        $stmt_update = $conn->prepare("UPDATE contracts SET new_coach_id = ?, start_date = ?, total_sessions = ?, total_price = ?, discount_percentage = ?, final_price = ? WHERE id = ?");
         $stmt_update->bind_param("isidddi", $coach_id, $start_date_str, $total_sessions, $total_price, $discount_percentage, $final_price, $contract_id);
         $stmt_update->execute();
         $stmt_update->close();

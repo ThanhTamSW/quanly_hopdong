@@ -6,7 +6,7 @@ $cache_version = '?v=' . filemtime(__FILE__);
 include 'includes/header.php'; 
 include 'includes/db.php';
 
-$coaches = $conn->query("SELECT id, full_name FROM users WHERE role = 'coach' ORDER BY full_name");
+$coaches = $conn->query("SELECT id, name as full_name FROM coaches ORDER BY name");
 
 $packages = [
     "TF8 - 8 buổi" => ['sessions' => 8, 'price' => 8 * 250000],
