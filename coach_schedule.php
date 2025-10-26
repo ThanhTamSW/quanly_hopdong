@@ -110,7 +110,7 @@ include 'includes/header.php';
                                                 if ($session_hour == $slot_hour) {
                                                     foreach ($sessions as $session) {
                                                         echo '<div class="alert alert-info p-2 mb-1" style="font-size: 0.9em;">';
-                                                        echo '<div><strong>' . htmlspecialchars($session['client']) . ' - ' . htmlspecialchars($time) . '</strong></div>';
+                                                        echo '<div><strong>' . htmlspecialchars($time) . ' - ' . htmlspecialchars($session['client']) . '</strong></div>';
                                                         echo '<small>' . htmlspecialchars($session['coach']) . '</small>';
                                                         echo '</div>';
                                                     }
