@@ -1,9 +1,20 @@
 <?php
+// Prevent any output before JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ob_start();
+
 session_start();
+
+// Clean any output that might have been generated
+ob_end_clean();
+ob_start();
+
 header('Content-Type: application/json');
 
 // Check login
 if (!isset($_SESSION['user_id'])) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Bạn cần đăng nhập!']);
     exit;
 }
@@ -13,6 +24,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $text = $input['text'] ?? '';
 
 if (empty($text)) {
+    ob_end_clean();
     echo json_encode(['success' => false, 'error' => 'Không có văn bản để phân tích!']);
     exit;
 }
@@ -189,16 +201,25 @@ try {
     }
     
     // Success
+    ob_end_clean();
     echo json_encode([
         'success' => true,
         'data' => $data
     ]);
     
 } catch (Exception $e) {
+    ob_end_clean();
     echo json_encode([
         'success' => false,
         'error' => 'Exception: ' . $e->getMessage()
     ]);
+} catch (Error $e) {
+    ob_end_clean();
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error: ' . $e->getMessage()
+    ]);
 }
+exit;
 ?>
 
