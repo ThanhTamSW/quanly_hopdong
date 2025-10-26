@@ -129,7 +129,7 @@ try {
         'Sunday' => 0
     ];
     
-    $stmt_session = $conn->prepare("INSERT INTO training_sessions (contract_id, session_date, session_time, status) VALUES (?, ?, ?, 'scheduled')");
+    $stmt_session = $conn->prepare("INSERT INTO training_sessions (contract_id, session_datetime, status) VALUES (?, ?, 'scheduled')");
     
     $current_date = new DateTime($start_date);
     $sessions_created = 0;
@@ -147,8 +147,9 @@ try {
             if ($current_day_of_week === $schedule_day) {
                 $date_str = $current_date->format('Y-m-d');
                 $time_str = $schedule_item['time'];
+                $datetime_str = $date_str . ' ' . $time_str . ':00'; // YYYY-MM-DD HH:MM:SS
                 
-                $stmt_session->bind_param("iss", $contract_id, $date_str, $time_str);
+                $stmt_session->bind_param("is", $contract_id, $datetime_str);
                 $stmt_session->execute();
                 
                 $sessions_created++;
