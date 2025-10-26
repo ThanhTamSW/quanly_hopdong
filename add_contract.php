@@ -239,7 +239,6 @@ $packages = [
     const customPackageWrapper = document.getElementById('custom_package_wrapper');
     const customPackageInput = document.getElementById('custom_package_name');
     const contractStartDate = document.getElementById('start_date');
-    const scheduleStartDate = document.getElementById('schedule_start_date');
     
     // Payment type elements
     const paymentFull = document.getElementById('payment_full');
