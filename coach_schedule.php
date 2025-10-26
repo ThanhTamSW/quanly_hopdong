@@ -68,6 +68,22 @@ include 'includes/header.php';
 ?>
 
 <style>
+    /* Sticky column cho cột Giờ */
+    .table thead th:first-child,
+    .table tbody td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: #fff;
+        z-index: 10;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    .table thead th:first-child {
+        background-color: #212529;
+        color: white;
+        z-index: 11;
+    }
+    
     /* Responsive cho mobile */
     @media (max-width: 768px) {
         .table-responsive {
