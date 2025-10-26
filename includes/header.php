@@ -33,6 +33,10 @@ if (isset($requires_login) && $requires_login === true) {
   <meta charset="UTF-8">
   <title><?= isset($page_title) ? htmlspecialchars($page_title) : 'Quản lý Hợp đồng' ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Prevent caching for forms -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');

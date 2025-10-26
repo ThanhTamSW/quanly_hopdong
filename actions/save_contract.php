@@ -28,6 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $discount_percentage = intval($_POST['discount_percentage']);
     $final_price = floatval($_POST['final_price']);
     
+    // VALIDATION: Nếu final_price = 0 nhưng total_price > 0, tự động tính lại
+    if ($final_price == 0 && $total_price > 0) {
+        $final_price = $total_price * (1 - $discount_percentage / 100);
+        error_log("WARNING: final_price was 0, recalculated to: " . $final_price);
+    }
+    
     // Lấy thông tin thanh toán
     $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : 'full';
     $paid_amount = ($payment_type === 'full') ? $final_price : 0;
